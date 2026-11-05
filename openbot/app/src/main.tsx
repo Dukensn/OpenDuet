@@ -13,6 +13,13 @@ if (!rootElement) {
   throw new Error("OpenBot could not find the application root element.");
 }
 
+// Demo mode answers `/api` in the browser, so a build with no server behind it can still be looked
+// at. Imported dynamically so a normal build carries none of it.
+if (import.meta.env.VITE_DEMO_MODE === "true") {
+  const { installDemoApi } = await import("./demo/mock-api");
+  installDemoApi();
+}
+
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
